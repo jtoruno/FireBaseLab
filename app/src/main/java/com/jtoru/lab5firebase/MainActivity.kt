@@ -20,6 +20,12 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.Query
+import android.support.v7.widget.helper.ItemTouchHelper
+import android.support.v4.view.accessibility.AccessibilityEventCompat.setAction
+import android.support.design.widget.Snackbar
+import android.support.annotation.NonNull
+
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -52,7 +58,22 @@ class MainActivity : AppCompatActivity() {
         manager.stackFromEnd = true
         recyclerView.layoutManager = manager
         queryInfo()
+        //enableSwipeToDeleteAndUndo()
 
+    }
+
+    private fun enableSwipeToDeleteAndUndo() {
+        val swipeToDeleteCallback = object : SwipeToDeleteCallback(this) {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, i: Int) {
+
+
+                val position = viewHolder.adapterPosition
+
+            }
+        }
+
+        val itemTouchhelper = ItemTouchHelper(swipeToDeleteCallback)
+        itemTouchhelper.attachToRecyclerView(recyclerView)
     }
 
     fun queryInfo(){
@@ -69,7 +90,9 @@ class MainActivity : AppCompatActivity() {
             override fun onBindViewHolder(holder: ItemViewHolder, position: Int, model: Item) {
                 val itemRef = getRef(position)
                 holder.itemView.setOnClickListener {
-                    Toast.makeText(this@MainActivity, "Clicked ", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this@MainActivity, ItemDetail::class.java)
+                    intent.putExtra("item",model)
+                    startActivity(intent)
                 }
                 holder.bindToItem(model)
             }
