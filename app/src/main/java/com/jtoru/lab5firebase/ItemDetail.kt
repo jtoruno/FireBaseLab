@@ -8,6 +8,11 @@ import android.view.MenuItem
 import android.widget.TextView
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import kotlinx.android.synthetic.main.activity_item_detail.*
+import android.graphics.BitmapFactory
+import android.graphics.Bitmap
+import android.util.Base64
+
 
 class ItemDetail : AppCompatActivity() {
 
@@ -34,6 +39,14 @@ class ItemDetail : AppCompatActivity() {
         name.text = item.name
         description.text = item.description
         cost.text = item.amount
+
+        if(item.image != "" && item.image!="image"){
+            val decodedString = Base64.decode(item.image, Base64.DEFAULT)
+            val decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size)
+            imageView2.setImageBitmap(decodedByte)
+
+        }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
